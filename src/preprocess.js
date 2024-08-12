@@ -1,32 +1,39 @@
 const { ethers } = require("ethers");
 
 function decodeData(encodedData) {
-  const totalAssets = BigInt("0x" + encodedData.slice(0, 32).toString("hex"));
-  let offset = 32;
+    // Define the data types that match the Solidity structure
+    const dataTypes = [
+        "uint256", // totalAssets
+        "address", // userAddress
+        "tuple(uint8 poolType, address contractAddress)[]", // Pool[]
+    ];
 
-  const numPools = Math.floor((encodedData.length - 32) / 65) + 1;
-
-  const pools = [];
-
-  for (let i = 0; i < numPools; i++) {
-    const poolType = parseInt(
-      encodedData.slice(offset, offset + 1).toString("hex"),
-      16,
+    // Decode the data using ethers.js
+    const decoded = ethers.AbiCoder.defaultAbiCoder().decode(
+        dataTypes,
+        encodedData,
     );
-    offset += 1;
 
-    const poolId =
-      "0x" + encodedData.slice(offset, offset + 32).toString("hex");
-    offset += 32;
+    const totalAssets = decoded[0].toString();
+    const userAddress = decoded[1];
+    var pools = {};
+    decoded[2].map(
+        (pool) =>
+            (pools[pool.contractAddress] = {
+                pool_model_disc: "CHAIN",
+                pool_type: Number(pool.poolType.toString()),
+                contract_address: pool.contractAddress,
+            }),
+    );
 
-    const contractAddress =
-      "0x" + encodedData.slice(offset, offset + 20).toString("hex");
-    offset += 20;
-
-    pools.push({ poolType, poolId, contractAddress });
-  }
-
-  return { totalAssets, pools };
+    return {
+        request_type: 0,
+        user_address: userAddress,
+        assets_and_pools: {
+            total_assets: Number(totalAssets.toString()),
+            pools,
+        },
+    };
 }
 
 // Example usage
@@ -36,11 +43,10 @@ function decodeData(encodedData) {
 // ["69", "0x3432300000000000000000000000000000000000000000000000000000000000", "0xBe53A109B494E5c9f97b9Cd39Fe969BE68BF6204"],
 // ["69", "0x6969000000000000000000000000000000000000000000000000000000000000", "0x33cCE530b09cc63f274a6f672Ec3644fF89B58f3"]];
 
-toDecode = "0x0000000000000000000000000000000000000000000000000000000000002710153432300000000000000000000000000000000000000000000000000000000000be53a109b494e5c9f97b9cd39fe969be68bf6204453432300000000000000000000000000000000000000000000000000000000000be53a109b494e5c9f97b9cd39fe969be68bf6204453432300000000000000000000000000000000000000000000000000000000000be53a109b494e5c9f97b9cd39fe969be68bf620445696900000000000000000000000000000000000000000000000000000000000033cce530b09cc63f274a6f672ec3644ff89b58f3";
+// input =
+//     "0x00000000000000000000000000000000000000000000021e19e0c9bab240000000000000000000000000000033cce530b09cc63f274a6f672ec3644ff89b58f300000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004500000000000000000000000033cce530b09cc63f274a6f672ec3644ff89b58f300000000000000000000000000000000000000000000000000000000000000150000000000000000000000002ab9f26e18b64848cd349582ca3b55c2d06f507d";
 
-// abiCoder = new ethers.AbiCoder();
-
-// result = abiCoder.decode([ "uint a", "tuple(uint8 poolType, bytes32 poolId, address contractAddress)[]"], toDecode);
-const encodedData = Buffer.from(toDecode.substr(2), "hex");
-const decodedData = decodeData(encodedData);
-console.log(decodedData);
+// const encodedData = Buffer.from(toDecode.substr(2), "hex");
+const encodedData = Buffer.from(input.substr(2), "hex");
+const output = decodeData(encodedData);
+// console.log(JSON.stringify(output));
