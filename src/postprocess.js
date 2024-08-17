@@ -80,5 +80,5 @@ function processAndEncode(input) {
 //     },
 // };
 
-const output = processAndEncode(input);
+output = processAndEncode(input);
 console.log("Encoded Data:", output);
