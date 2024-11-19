@@ -80,5 +80,8 @@ function processAndEncode(input) {
 //     },
 // };
 
-output = processAndEncode(input);
-console.log("Encoded Data:", output);
+console.log("input data:");
+console.log(JSON.stringify(input));
+encoded = processAndEncode(input);
+console.log("Encoded Data:", encoded);
+output = { sn_response: encoded };
