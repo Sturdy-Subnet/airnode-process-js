@@ -42,7 +42,7 @@ function processAndEncode(input) {
 //     request_uuid: "3ed28066e4ad46abb292f7e64dccaa8a",
 //     allocations: {
 //         1: {
-//             apy: 0,
+//             rank: 1,
 //             allocations: {
 //                 "0xe53FFd56FaDC7030156069aE1b34dE0Ab8b703F4": 4.07e21,
 //                 "0xC8D4a8a7F593e73cD32cD6C5Fb11fE20F23f9695": 0,
@@ -51,7 +51,7 @@ function processAndEncode(input) {
 //             },
 //         },
 //         2: {
-//             apy: 0,
+//             rank: 3,
 //             allocations: {
 //                 "0xe53FFd56FaDC7030156069aE1b34dE0Ab8b703F4": 4.07e21,
 //                 "0xC8D4a8a7F593e73cD32cD6C5Fb11fE20F23f9695": 0,
@@ -60,7 +60,7 @@ function processAndEncode(input) {
 //             },
 //         },
 //         4: {
-//             apy: 0,
+//             rank: 2,
 //             allocations: {
 //                 "0xe53FFd56FaDC7030156069aE1b34dE0Ab8b703F4": 4.07e21,
 //                 "0xC8D4a8a7F593e73cD32cD6C5Fb11fE20F23f9695": 0,
@@ -69,7 +69,7 @@ function processAndEncode(input) {
 //             },
 //         },
 //         9: {
-//             apy: 0,
+//             rank: 3,
 //             allocations: {
 //                 "0xe53FFd56FaDC7030156069aE1b34dE0Ab8b703F4": 4.07e21,
 //                 "0xC8D4a8a7F593e73cD32cD6C5Fb11fE20F23f9695": 0,
